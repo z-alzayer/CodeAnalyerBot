@@ -10,9 +10,11 @@ A code analysis tool built during Google's 5-Day GenAI Intensive Course. Uses La
 - Identifies redundant code and refactoring opportunities
 
 
+
 ## Setup
 
 ```bash
+# Install the requirements
 # Add your Google API key to API_Key.py
 python CodeAgent.py
 ```
@@ -31,13 +33,7 @@ Combines:
 ## Usage
 
 ```
-&gt; Please provide directory path
-&gt; /path/to/project
-[Files listed]
-&gt; Analyze main.py
-[Analysis shown]
-&gt; Check for redundant code
-[RAG analysis results]
+python CodeAgent.py
 ```
 
 *Created during Google's 5-Day GenAI Intensive, April 2025*
