@@ -15,8 +15,7 @@ A code analysis tool built during Google's 5-Day GenAI Intensive Course. Uses La
 
 ```bash
 # Install the requirements
-# Add your Google API key to API_Key.py
-python CodeAgent.py
+python code_agent.py
 ```
 
 
@@ -33,7 +32,7 @@ Combines:
 ## Usage
 
 ```
-python CodeAgent.py
+python code_agent.py
 ```
 
 *Created during Google's 5-Day GenAI Intensive, April 2025*

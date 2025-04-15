@@ -10,12 +10,10 @@ from collections.abc import Iterable
 from langchain_core.messages.tool import ToolMessage
 from langgraph.prebuilt import ToolNode
 from langchain_core.tools import tool, ToolException
-from API_Key import GOOGLE_KEY
 
-# Import the RAG tool
-from CreateRag import code_analysis_rag  
+from codeanalyserbot.create_rag import code_analysis_rag  
 
-os.environ["GOOGLE_API_KEY"] = GOOGLE_KEY
+
 
 class CodeState(TypedDict):
     """State representing the code analysis session"""
@@ -149,35 +147,33 @@ def route_based_on_last_message(state: CodeState) -> Literal["tools", "human"]:
         return "tools"
     return "human"
 
-# Graph Construction
-graph_builder = StateGraph(CodeState)
-graph_builder.add_node("chatbot", chatbot_node)
-graph_builder.add_node("human", human_node)
-graph_builder.add_node("tools", ToolNode(auto_tools))
+def construct_graph():
+    # Graph Construction
+    graph_builder = StateGraph(CodeState)
+    graph_builder.add_node("chatbot", chatbot_node)
+    graph_builder.add_node("human", human_node)
+    graph_builder.add_node("tools", ToolNode(auto_tools))
 
-graph_builder.set_entry_point("chatbot")
+    graph_builder.set_entry_point("chatbot")
 
-graph_builder.add_conditional_edges(
-    "chatbot",
-    route_based_on_last_message,
-    {"tools": "tools", "human": "human"}
-)
+    graph_builder.add_conditional_edges(
+        "chatbot",
+        route_based_on_last_message,
+        {"tools": "tools", "human": "human"}
+    )
 
-graph_builder.add_conditional_edges(
-    "human",
-    lambda s: "__end__" if s.get("finished") else "chatbot"
-)
+    graph_builder.add_conditional_edges(
+        "human",
+        lambda s: "__end__" if s.get("finished") else "chatbot"
+    )
 
-graph_builder.add_conditional_edges(
-    "tools",
-    route_after_tools
-)
+    graph_builder.add_conditional_edges(
+        "tools",
+        route_after_tools
+    )
 
-# Final Compilation
-analysis_agent = graph_builder.compile()
-
-# Execution Example
-if __name__ == "__main__":
+    # Final Compilation
+    analysis_agent = graph_builder.compile()
     config = {"recursion_limit": 100}
     initial_state = {
         "messages": [], 
@@ -186,4 +182,10 @@ if __name__ == "__main__":
         "analyzed_files": [],
         "finished": False
     }
-    analysis_agent.invoke(initial_state, config)
+    # analysis_agent.invoke(initial_state, config)
+    return analysis_agent, initial_state, config
+# Execution Example
+if __name__ == "__main__":
+    agent, initial_state, config = construct_graph()
+    agent.invoke(initial_state, config)
+

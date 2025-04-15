@@ -1,12 +1,13 @@
 from langchain_core.tools import tool
 from typing import Annotated
 import os
+
 import chromadb
+
 from google import genai
 from google.genai import types
 from google.api_core import retry
 from chromadb import Documents, EmbeddingFunction, Embeddings
-from API_Key import GOOGLE_KEY
 
 # Define the embedding function
 is_retriable = lambda e: (isinstance(e, genai.errors.APIError) and e.code in {429, 503})
@@ -52,13 +53,13 @@ def code_analysis_rag(
     """
     try:
         # Initialize the Gemini client
-        client = genai.Client(api_key=GOOGLE_KEY)
+        client = genai.Client(api_key=os.environ["GOOGLE_API_KEY"])
         
         # Process all Python files in the directory
         combined_content = process_python_files(directory_path)
         
         # Create a ChromaDB collection with Gemini embeddings
-        embed_fn = GeminiEmbeddingFunction(api_key=GOOGLE_KEY)
+        embed_fn = GeminiEmbeddingFunction(api_key=os.environ["GOOGLE_API_KEY"])
         chroma_client = chromadb.Client()
         db_name = f"code_analysis_{os.path.basename(directory_path)}"
         db = chroma_client.get_or_create_collection(name=db_name, embedding_function=embed_fn)
