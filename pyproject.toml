@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "codeanalyserbot"
+version = "0.1.0"
+description = "A code analysis tool built with LangGraph and Gemini models"
+readme = "README.md"
+authors = [
+    {name = "z-alzayer", email = "zba21@ic.ac.uk"}
+]
+license = {text = "MIT"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "langgraph>=0.0.16",
+    "langchain-core>=0.1.5",
+    "langchain-google-genai>=0.0.5",
+    "google-generativeai>=0.3.1",
+    "chromadb>=0.4.18",
+    "typing-extensions>=4.8.0",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/z-alzayer/CodeAnalyserBot"
